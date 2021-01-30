@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import me.dooger.duelsniffer.statapi.exception.ApiRequestException;
 import me.dooger.duelsniffer.statapi.exception.InvalidKeyException;
 import me.dooger.duelsniffer.statapi.exception.PlayerNullException;
+import me.dooger.duelsniffer.utils.ChatColor;
 import me.dooger.duelsniffer.utils.ChatUtils;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Duels extends DuelsUtils {
-    private boolean isNicked;
     private JsonObject duelsJson;
     private int gamesPlayed, kills, deaths, wins, losses, meleeSwings, meleeHits, currWs, bestWs;
     private DuelsModes mode;
@@ -19,11 +19,11 @@ public class Duels extends DuelsUtils {
         super(playerName, playerUUID, "Duels");
         this.mode = mode;
         setData();
-        setStats();
+        if (!this.isNicked) setStats();
     }
 
     public void setData() {
-        isNicked = false;
+        this.isNicked = false;
         JsonObject obj = null;
         boolean isFunctional = false;
         try {
@@ -31,17 +31,17 @@ public class Duels extends DuelsUtils {
             isFunctional = true;
         } catch (ApiRequestException ignored) {
         } catch (PlayerNullException ex) {
-            isNicked = true;
+            this.isNicked = true;
         } catch (InvalidKeyException ex) {
             ChatUtils.sendMessage("Invalid API Key!");
         }
 
         try {
-            if (!isNicked && isFunctional) {
+            if (!this.isNicked && isFunctional) {
                 this.duelsJson = obj;
             }
         } catch (NullPointerException ex) {
-            if (!isNicked) {
+            if (!this.isNicked) {
                 System.err.println("[DUELSNIFFER] Maybe they have never played Duels before");
             }
 
@@ -173,23 +173,52 @@ public class Duels extends DuelsUtils {
 
     @Override
     public String getFormattedStatsString() {
-        return String.format("[%s] %s - BWS: %s, WLR: %s, KDR: %s, Aim: %s", getCurrentWs(), getPlayerName(), getBestWs(), getWLR(this), getKDR(this), getMeleeAim(this));
+
+        if (!this.isNicked) {
+            int current = getCurrentWs();
+            int best = getBestWs();
+            double wlr = getWLR(this);
+            double kdr = getKDR(this);
+            double aim = getMeleeAim(this);
+
+            String formatString = "%s%s - CWS: %s, BWS: %s, WLR: %s, KDR: %s, AIM: %s";
+
+            if (this.rank.getRankColor() != ChatColor.GRAY) {
+                formatString = "%s %s - CWS: %s, BWS: %s, WLR: %s, KDR: %s, AIM: %s";
+            }
+
+            return String.format(formatString,
+                    this.rank.getFormattedRank(),
+                    getPlayerName() + ChatColor.RESET,
+                    currentWSColor(current) + Integer.toString(current) + ChatColor.RESET,
+                    bestWSColor(best) + Integer.toString(best) + ChatColor.RESET,
+                    wlrColor(wlr) + Double.toString(wlr) + ChatColor.RESET,
+                    kdrColor(kdr) + Double.toString(kdr) + ChatColor.RESET,
+                    meleeAimColor(aim) + Double.toString(aim));
+        } else {
+            return ChatColor.RED + "[NICKED] " + getPlayerName();
+        }
     }
 
     @Override
     public HashMap<String,Integer> getFormattedStatColorMap() {
         LinkedHashMap<String,Integer> list = new LinkedHashMap<>();
-        int current = getCurrentWs();
-        int best = getBestWs();
-        double wlr = getWLR(this);
-        double kdr = getKDR(this);
-        double aim = getMeleeAim(this);
+        if (!this.isNicked) {
+            int current = getCurrentWs();
+            int best = getBestWs();
+            double wlr = getWLR(this);
+            double kdr = getKDR(this);
+            double aim = getMeleeAim(this);
 
-        list.put(Integer.toString(current), currentWSColor(current));
-        list.put(Integer.toString(best), bestWSColor(best));
-        list.put(Double.toString(wlr), wlrColor(wlr));
-        list.put(Double.toString(kdr), kdrColor(kdr));
-        list.put(Double.toString(aim), mAimColorDouble(aim));
+            list.put(Integer.toString(current), currentWSColor(current).getRGB());
+            list.put(Integer.toString(best), bestWSColor(best).getRGB());
+            list.put(Double.toString(wlr), wlrColor(wlr).getRGB());
+            list.put(Double.toString(kdr), kdrColor(kdr).getRGB());
+            list.put(Double.toString(aim), meleeAimColor(aim).getRGB());
+        } else {
+            list.put("NICKED", ChatColor.RED.getRGB());
+            list.put("[NICKED]", ChatColor.RED.getRGB());
+        }
 
         return list;
     }

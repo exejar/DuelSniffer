@@ -27,112 +27,112 @@ public abstract class DuelsUtils extends HypixelBase {
         return MathUtils.formatDouble(d.getMeleeHits(), d.getMeleeSwings());
     }
 
-    public int kdrColor(double kdr) {
-        int rgb;
+    public ChatColor kdrColor(double kdr) {
+        ChatColor rgb;
         if (kdr < 5) {
-            rgb = ChatColor.GRAY.getRGB();
+            rgb = ChatColor.GRAY;
         } else if (kdr < 10) {
-            rgb = ChatColor.WHITE.getRGB();
+            rgb = ChatColor.WHITE;
         } else if (kdr < 20) {
-            rgb = ChatColor.GOLD.getRGB();
+            rgb = ChatColor.GOLD;
         } else if (kdr < 25) {
-            rgb = ChatColor.DARK_GREEN.getRGB();
+            rgb = ChatColor.DARK_GREEN;
         } else if (kdr < 30) {
-            rgb = ChatColor.RED.getRGB();
+            rgb = ChatColor.RED;
         } else if (kdr < 50) {
-            rgb = ChatColor.DARK_RED.getRGB();
+            rgb = ChatColor.DARK_RED;
         } else if (kdr < 100) {
-            rgb = ChatColor.LIGHT_PURPLE.getRGB();
+            rgb = ChatColor.LIGHT_PURPLE;
         } else {
-            rgb = ChatColor.DARK_PURPLE.getRGB();
+            rgb = ChatColor.DARK_PURPLE;
         }
         return rgb;
     }
 
-    public int wlrColor(double wlr) {
-        int color;
+    public ChatColor wlrColor(double wlr) {
+        ChatColor color;
         if (wlr < 5) {
-            color = ChatColor.GRAY.getRGB();
+            color = ChatColor.GRAY;
         } else if (wlr < 10) {
-            color = ChatColor.WHITE.getRGB();
+            color = ChatColor.WHITE;
         } else if (wlr < 20) {
-            color = ChatColor.GOLD.getRGB();
+            color = ChatColor.GOLD;
         } else if (wlr < 25) {
-            color = ChatColor.DARK_GREEN.getRGB();
+            color = ChatColor.DARK_GREEN;
         } else if (wlr < 30) {
-            color = ChatColor.RED.getRGB();
+            color = ChatColor.RED;
         } else if (wlr < 50) {
-            color = ChatColor.DARK_RED.getRGB();
+            color = ChatColor.DARK_RED;
         } else if (wlr < 100) {
-            color = ChatColor.LIGHT_PURPLE.getRGB();
+            color = ChatColor.LIGHT_PURPLE;
         } else {
-            color = ChatColor.DARK_PURPLE.getRGB();
+            color = ChatColor.DARK_PURPLE;
         }
         return color;
     }
 
-    public int bestWSColor(int bestws) {
-        int color;
+    public ChatColor bestWSColor(int bestws) {
+        ChatColor color;
         if (bestws < 50) {
-            color = ChatColor.GRAY.getRGB();
+            color = ChatColor.GRAY;
         } else if (bestws < 75) {
-            color = ChatColor.WHITE.getRGB();
+            color = ChatColor.WHITE;
         } else if (bestws < 100) {
-            color = ChatColor.GOLD.getRGB();
+            color = ChatColor.GOLD;
         } else if (bestws < 150) {
-            color = ChatColor.DARK_GREEN.getRGB();
+            color = ChatColor.DARK_GREEN;
         } else if (bestws < 200) {
-            color = ChatColor.RED.getRGB();
+            color = ChatColor.RED;
         } else if (bestws < 250) {
-            color = ChatColor.DARK_RED.getRGB();
+            color = ChatColor.DARK_RED;
         } else if (bestws < 500) {
-            color = ChatColor.LIGHT_PURPLE.getRGB();
+            color = ChatColor.LIGHT_PURPLE;
         } else {
-            color = ChatColor.DARK_PURPLE.getRGB();
+            color = ChatColor.DARK_PURPLE;
         }
         return color;
     }
 
-    public int currentWSColor(int currws) {
-        int color;
+    public ChatColor currentWSColor(int currws) {
+        ChatColor color;
         if (currws < 50) {
-            color = ChatColor.GRAY.getRGB();
+            color = ChatColor.GRAY;
         } else if (currws < 75) {
-            color = ChatColor.WHITE.getRGB();
+            color = ChatColor.WHITE;
         } else if (currws < 100) {
-            color = ChatColor.GOLD.getRGB();
+            color = ChatColor.GOLD;
         } else if (currws < 150) {
-            color = ChatColor.DARK_GREEN.getRGB();
+            color = ChatColor.DARK_GREEN;
         } else if (currws < 200) {
-            color = ChatColor.RED.getRGB();
+            color = ChatColor.RED;
         } else if (currws < 250) {
-            color = ChatColor.DARK_RED.getRGB();
+            color = ChatColor.DARK_RED;
         } else if (currws < 500) {
-            color = ChatColor.LIGHT_PURPLE.getRGB();
+            color = ChatColor.LIGHT_PURPLE;
         } else {
-            color = ChatColor.DARK_PURPLE.getRGB();
+            color = ChatColor.DARK_PURPLE;
         }
         return color;
     }
 
-    public int mAimColorDouble(double maim) {
-        int color;
+    public ChatColor meleeAimColor(double maim) {
+        ChatColor color;
         if (maim < 0.25) {
-            color = ChatColor.GRAY.getRGB();
+            color = ChatColor.GRAY;
         } else if (maim < 0.30) {
-            color = ChatColor.WHITE.getRGB();
+            color = ChatColor.WHITE;
         } else if (maim < 0.35) {
-            color = ChatColor.GOLD.getRGB();
+            color = ChatColor.GOLD;
         } else if (maim < 0.40) {
-            color = ChatColor.DARK_GREEN.getRGB();
+            color = ChatColor.DARK_GREEN;
         } else if (maim < 0.50) {
-            color = ChatColor.RED.getRGB();
+            color = ChatColor.RED;
         } else if (maim < 0.75) {
-            color = ChatColor.DARK_RED.getRGB();
+            color = ChatColor.DARK_RED;
         } else if (maim < 0.85) {
-            color = ChatColor.LIGHT_PURPLE.getRGB();
+            color = ChatColor.LIGHT_PURPLE;
         } else {
-            color = ChatColor.DARK_PURPLE.getRGB();
+            color = ChatColor.DARK_PURPLE;
         }
         return color;
     }

@@ -1,5 +1,6 @@
 package me.dooger.duelsniffer.statapi;
 
+import me.dooger.duelsniffer.utils.ChatColor;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 public abstract class HypixelBase extends HypixelAPI {
     private String playerName, playerUUID, gameType;
     private EntityPlayer player;
+    public boolean isNicked;
 
     public HypixelBase(String playerName, String playerUUID, String gameType) {
         this.playerName = playerName;
@@ -32,6 +34,6 @@ public abstract class HypixelBase extends HypixelAPI {
 
     public EntityPlayer getPlayerEntity() { return this.player; }
 
-    public int getRankColor() { return this.rankColor; }
+    public ChatColor getRankColor() { return this.rank.getRankColor(); }
 
 }

@@ -1,10 +1,9 @@
 package me.dooger.duelsniffer.hud;
 
 import me.dooger.duelsniffer.statapi.HPlayer;
-import me.dooger.duelsniffer.statapi.HypixelBase;
+import me.dooger.duelsniffer.utils.ChatColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -34,12 +33,15 @@ public class StatHud extends RenderUtils {
         RenderManager renderManager = mc.getRenderManager();
         FontRenderer fontRenderer = renderManager.getFontRenderer();
 
-        fontRenderer.drawString("NAME", 5, 5, Color.RED.getRGB());
-        fontRenderer.drawString("CWS", 105, 5, Color.RED.getRGB());
-        fontRenderer.drawString("BWS", 155, 5, Color.RED.getRGB());
-        fontRenderer.drawString("WLR", 205, 5, Color.RED.getRGB());
-        fontRenderer.drawString("KDR", 255, 5, Color.RED.getRGB());
-        fontRenderer.drawString("AIM", 305, 5, Color.RED.getRGB());
+        int height = (hPlayers.size() * (fontRenderer.FONT_HEIGHT + 3)) + fontRenderer.FONT_HEIGHT + 10;
+        drawRect(0, 0, 350, height + 3, new Color(15, 15, 15, 100).getRGB());
+
+        fontRenderer.drawString("NAME", 5, 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("CWS", 105, 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("BWS", 155, 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("WLR", 205, 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("KDR", 255, 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("AIM", 305, 5, ChatColor.RED.getRGB());
 
         int spacer = fontRenderer.FONT_HEIGHT + 10;
         for (Map.Entry<String,HPlayer> entry : hPlayers.entrySet()) {
@@ -47,18 +49,23 @@ public class StatHud extends RenderUtils {
             spacer += fontRenderer.FONT_HEIGHT + 3;
         }
 
-        drawRect(0, 0, 350, spacer + 3, new Color(15, 15, 15, 100).getRGB());
+
     }
 
     private void drawPlayerStats(HPlayer player, FontRenderer font, int y) {
         int spacer = 5;
-        font.drawString(player.getPlayerName(), spacer, y, player.getRankColor(), true);
-        spacer += 100;
+        if (!player.getGame().isNicked) {
+            font.drawString(player.getPlayerName(), spacer, y, player.getRankColor().getRGB(), true);
+            spacer += 100;
 
-        for (Map.Entry<String,Integer> stat : player.getFormattedStatColorMap().entrySet()) {
-            font.drawString(stat.getKey(), spacer, y, stat.getValue(), true);
-            spacer += 50;
+            for (Map.Entry<String,Integer> stat : player.getFormattedStatColorMap().entrySet()) {
+                font.drawString(stat.getKey(), spacer, y, stat.getValue(), true);
+                spacer += 50;
+            }
+        } else {
+            font.drawString("[NICKED] " + player.getPlayerName(), spacer, y, ChatColor.RED.getRGB(), true);
         }
+
     }
 
     public HashMap<String,HPlayer> getHPlayers() {
@@ -71,6 +78,8 @@ public class StatHud extends RenderUtils {
 
     public void addHPlayer(String name, HPlayer hPlayer) {
         hPlayers.put(name, hPlayer);
+        System.out.println(name + " " + (hPlayer == null));
+        System.out.println(hPlayers.size());
     }
 
     public void clearHPlayerList() {

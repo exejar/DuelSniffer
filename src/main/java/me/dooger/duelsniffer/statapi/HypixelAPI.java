@@ -11,15 +11,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 public class HypixelAPI {
 
     private final String key = ModConfig.getInstance().getApiKey();
-    protected int rankColor;
+    protected Rank rank;
 
     public JsonObject setGameData(String uuid, String gameType) throws InvalidKeyException, PlayerNullException, ApiRequestException {
         JsonObject obj = new JsonObject();
@@ -47,7 +47,7 @@ public class HypixelAPI {
             }
 
             JsonObject player = obj.get("player").getAsJsonObject();
-            rankColor = getRankColor(player);
+            setRankColor(player);
             JsonObject stats = player.get("stats").getAsJsonObject();
             obj = stats.get(gameType).getAsJsonObject();
 
@@ -55,9 +55,30 @@ public class HypixelAPI {
         }
     }
 
-    private int getRankColor(JsonObject player) {
-        String staff, rank = "", mvpPlusPlus;
-        int color = ChatColor.DARK_GRAY.getRGB();
+    public static String getUUID(String name) {
+        String uuid = "";
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(String.format("https://api.mojang.com/users/profiles/minecraft/%s", name));
+            try (InputStream is = client.execute(request).getEntity().getContent()) {
+                JsonParser jsonParser = new JsonParser();
+                JsonObject object = jsonParser.parse(new InputStreamReader(is, StandardCharsets.UTF_8)).getAsJsonObject();
+                uuid = object.get("id").getAsString();
+            } catch (NullPointerException ex) {
+                ex.printStackTrace();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return uuid;
+    }
+
+    private void setRankColor(JsonObject player) {
+        String staff, rank = "", mvpPlusPlus, plus;
+        ChatColor rankColor = ChatColor.GRAY;
+        ChatColor plusColor;
+        String formattedRank = ChatColor.GRAY + "";
+
         try {
             staff = player.get("rank").getAsString();
         } catch (NullPointerException ignored) {
@@ -71,34 +92,52 @@ public class HypixelAPI {
         try {
             rank = player.get("newPackageRank").getAsString();
         } catch (NullPointerException e) {
-            color = ChatColor.GRAY.getRGB();
+            rankColor = ChatColor.GRAY;
         }
+        try {
+            plus = player.get("rankPlusColor").getAsString();
+        } catch (NullPointerException ex) {
+            plus = "RED";
+        }
+        plusColor = ChatColor.valueOf(plus);
+
         if (mvpPlusPlus.equalsIgnoreCase("SUPERSTAR")) {
-            color = ChatColor.GOLD.getRGB();
+            rankColor = ChatColor.GOLD;
+            formattedRank = String.format("%s[MVP%s++%s]", rankColor, plusColor, rankColor);
         } else if (!mvpPlusPlus.equalsIgnoreCase("SUPERSTAR")) {
             if (rank.equalsIgnoreCase("MVP_PLUS")) {
-                color = ChatColor.AQUA.getRGB();
+                rankColor = ChatColor.AQUA;
+                formattedRank = String.format("%s[MVP%s+%s]", rankColor, plusColor, rankColor);
             } else if (rank.equalsIgnoreCase("MVP")) {
-                color = ChatColor.AQUA.getRGB();
+                rankColor = ChatColor.AQUA;
+                formattedRank = String.format("%s[MVP]", rankColor);
             } else if (rank.equalsIgnoreCase("VIP_PLUS")) {
-                color = ChatColor.GREEN.getRGB();
+                rankColor = ChatColor.GREEN;
+                plusColor = ChatColor.GOLD;
+                formattedRank = String.format("%s[VIP%s+%s]", rankColor, plusColor, rankColor);
             } else if (rank.equalsIgnoreCase("VIP")) {
-                color = ChatColor.GREEN.getRGB();
+                rankColor = ChatColor.GREEN;
+                formattedRank = String.format("%s[VIP]", rankColor);
             }
         }
         try {
             if (staff.equalsIgnoreCase("HELPER")) {
-                color = ChatColor.BLUE.getRGB();
+                rankColor = ChatColor.BLUE;
+                formattedRank = String.format("%s[HELPER]", rankColor);
             } else if (staff.equalsIgnoreCase("MODERATOR")) {
-                color = ChatColor.DARK_GREEN.getRGB();
+                rankColor = ChatColor.DARK_GREEN;
+                formattedRank = String.format("%s[MODERATOR]", rankColor);
             } else if (staff.equalsIgnoreCase("ADMIN")) {
-                color = ChatColor.RED.getRGB();
+                rankColor = ChatColor.RED;
+                formattedRank = String.format("%s[ADMIN]", rankColor);
             } else if (staff.equalsIgnoreCase("YOUTUBER")) {
-                color = ChatColor.RED.getRGB();
+                rankColor = ChatColor.RED;
+                formattedRank = String.format("%s[%sYOUTUBE%s]", rankColor, ChatColor.WHITE, rankColor);
             }
         } catch (Exception ignored) {
         }
-        return color;
+
+        this.rank = new Rank(formattedRank, rankColor, plusColor);
     }
 
 }

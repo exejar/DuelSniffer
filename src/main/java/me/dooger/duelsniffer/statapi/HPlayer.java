@@ -1,10 +1,9 @@
 package me.dooger.duelsniffer.statapi;
 
-import me.dooger.duelsniffer.Main;
+import me.dooger.duelsniffer.utils.ChatColor;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class HPlayer {
 
@@ -12,8 +11,6 @@ public class HPlayer {
 
     public HPlayer(HypixelBase game) {
         this.game = game;
-        System.out.println("Adding HPlayer to List");
-        Main.getInstance().statHud.addHPlayer(getPlayerName(), this);
     }
 
     public String getPlayerUUID() {
@@ -36,7 +33,7 @@ public class HPlayer {
         return game.getPlayerEntity();
     }
 
-    public int getRankColor() {
+    public ChatColor getRankColor() {
         return game.getRankColor();
     }
 
