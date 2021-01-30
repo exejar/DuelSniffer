@@ -9,6 +9,7 @@ public abstract class HypixelBase extends HypixelAPI {
     private String playerName, playerUUID, gameType;
     private EntityPlayer player;
     public boolean isNicked;
+    public boolean hasPlayed;
 
     public HypixelBase(String playerName, String playerUUID, String gameType) {
         this.playerName = playerName;
@@ -21,6 +22,10 @@ public abstract class HypixelBase extends HypixelAPI {
         this.playerUUID = player.getUniqueID().toString();
         this.gameType = gameType;
     }
+
+    public abstract void setData();
+
+    public abstract void setStats(boolean hasPlayed);
 
     public abstract String getNameStats();
 

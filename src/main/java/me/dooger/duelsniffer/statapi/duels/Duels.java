@@ -12,18 +12,19 @@ import java.util.LinkedHashMap;
 
 public class Duels extends DuelsUtils {
     private JsonObject duelsJson;
-    private int gamesPlayed, kills, deaths, wins, losses, meleeSwings, meleeHits, currWs, bestWs;
+    private int gamesPlayed = 0, kills = 0, deaths = 0, wins = 0, losses = 0, meleeSwings = 0, meleeHits = 0, currWs = 0, bestWs = 0;
     private DuelsModes mode;
 
     public Duels(String playerName, String playerUUID, DuelsModes mode) {
         super(playerName, playerUUID, "Duels");
         this.mode = mode;
         setData();
-        if (!this.isNicked) setStats();
+        if (!this.isNicked) setStats(hasPlayed);
     }
 
     public void setData() {
         this.isNicked = false;
+        this.hasPlayed = false;
         JsonObject obj = null;
         boolean isFunctional = false;
         try {
@@ -38,6 +39,7 @@ public class Duels extends DuelsUtils {
 
         try {
             if (!this.isNicked && isFunctional) {
+                this.hasPlayed = true;
                 this.duelsJson = obj;
             }
         } catch (NullPointerException ex) {
@@ -49,16 +51,18 @@ public class Duels extends DuelsUtils {
         }
     }
 
-    public void setStats() {
-        setGamesPlayed();
-        setKills(mode);
-        setDeaths(mode);
-        setWins(mode);
-        setLosses(mode);
-        setMeleeSwings(mode);
-        setMeleeHits(mode);
-        setCurrentWinstreak(mode);
-        setBestWinstreak(mode);
+    public void setStats(boolean hasPlayed) {
+        if (hasPlayed) {
+            setGamesPlayed();
+            setKills(mode);
+            setDeaths(mode);
+            setWins(mode);
+            setLosses(mode);
+            setMeleeSwings(mode);
+            setMeleeHits(mode);
+            setCurrentWinstreak(mode);
+            setBestWinstreak(mode);
+        }
     }
 
     private void setGamesPlayed() {
