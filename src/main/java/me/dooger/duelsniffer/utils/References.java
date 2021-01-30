@@ -11,4 +11,6 @@ public interface References {
     String MODNAME = "Duel Sniffer";
     String MODID = "duelsniffer";
     String VERSION = "1.0-DEV";
+
+    String MODNAMEPREF = "[DSNIFF]";
 }

@@ -1,6 +1,7 @@
 package me.dooger.duelsniffer;
 
 import me.dooger.duelsniffer.commands.GetStats;
+import me.dooger.duelsniffer.commands.GuiCommand;
 import me.dooger.duelsniffer.config.ModConfig;
 import me.dooger.duelsniffer.events.QueueEvent;
 import me.dooger.duelsniffer.events.SetAPIEvent;
@@ -32,12 +33,11 @@ public class Main {
     public void init(FMLInitializationEvent event) {
         statHud = new StatHud();
         registerListeners(statHud, new QueueEvent(), new SetAPIEvent());
-        registerCommands(new GetStats());
+        registerCommands(new GetStats(), new GuiCommand());
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-
     }
 
     public static Main getInstance() { return instance; }

@@ -16,6 +16,8 @@ public class StatHud extends RenderUtils {
     private HashMap<String,HPlayer> hPlayers;
     private Minecraft mc = Minecraft.getMinecraft();
 
+    private int addX = 0, addY = 0, minX, maxX, minY, maxY;
+
     public StatHud() {
         hPlayers = new HashMap<>();
     }
@@ -33,27 +35,35 @@ public class StatHud extends RenderUtils {
         RenderManager renderManager = mc.getRenderManager();
         FontRenderer fontRenderer = renderManager.getFontRenderer();
 
-        int height = (hPlayers.size() * (fontRenderer.FONT_HEIGHT + 3)) + fontRenderer.FONT_HEIGHT + 10;
-        drawRect(0, 0, 350, height + 3, new Color(15, 15, 15, 100).getRGB());
+        final int height = (hPlayers.size() * (fontRenderer.FONT_HEIGHT + 3)) + fontRenderer.FONT_HEIGHT + 10;
+        final int minX = addX;
+        final int minY = addY;
+        final int maxX = addX + 350;
+        final int maxY = addY + height;
 
-        fontRenderer.drawString("NAME", 5, 5, ChatColor.RED.getRGB());
-        fontRenderer.drawString("CWS", 105, 5, ChatColor.RED.getRGB());
-        fontRenderer.drawString("BWS", 155, 5, ChatColor.RED.getRGB());
-        fontRenderer.drawString("WLR", 205, 5, ChatColor.RED.getRGB());
-        fontRenderer.drawString("KDR", 255, 5, ChatColor.RED.getRGB());
-        fontRenderer.drawString("AIM", 305, 5, ChatColor.RED.getRGB());
+        drawRect(minX, minY, maxX, maxY, new Color(15, 15, 15, 100).getRGB());
 
-        int spacer = fontRenderer.FONT_HEIGHT + 10;
+        fontRenderer.drawString("NAME", minX + 5, minY + 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("CWS", minX + 105, minY + 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("BWS", minX + 155, minY + 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("WLR", minX + 205, minY + 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("KDR", minX + 255, minY + 5, ChatColor.RED.getRGB());
+        fontRenderer.drawString("AIM", minX + 305, minY + 5, ChatColor.RED.getRGB());
+
+        int spacer = minY + fontRenderer.FONT_HEIGHT + 10;
         for (Map.Entry<String,HPlayer> entry : hPlayers.entrySet()) {
-            drawPlayerStats(entry.getValue(), fontRenderer, spacer);
+            drawPlayerStats(entry.getValue(), fontRenderer, minX, spacer);
             spacer += fontRenderer.FONT_HEIGHT + 3;
         }
 
-
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
     }
 
-    private void drawPlayerStats(HPlayer player, FontRenderer font, int y) {
-        int spacer = 5;
+    private void drawPlayerStats(HPlayer player, FontRenderer font, int x, int y) {
+        int spacer = x + 5;
         if (!player.getGame().isNicked) {
             font.drawString(player.getPlayerName(), spacer, y, player.getRankColor().getRGB(), true);
             spacer += 100;
@@ -65,7 +75,18 @@ public class StatHud extends RenderUtils {
         } else {
             font.drawString("[NICKED] " + player.getPlayerName(), spacer, y, ChatColor.RED.getRGB(), true);
         }
+    }
 
+    public void updatePos() {
+        RenderManager renderManager = mc.getRenderManager();
+        FontRenderer fontRenderer = renderManager.getFontRenderer();
+
+        final int height = fontRenderer.FONT_HEIGHT + 10;
+
+        this.minX = addX;
+        this.minY = addY;
+        this.maxX = addX + 350;
+        this.maxY = addY + height;
     }
 
     public HashMap<String,HPlayer> getHPlayers() {
@@ -78,12 +99,27 @@ public class StatHud extends RenderUtils {
 
     public void addHPlayer(String name, HPlayer hPlayer) {
         hPlayers.put(name, hPlayer);
-        System.out.println(name + " " + (hPlayer == null));
-        System.out.println(hPlayers.size());
     }
 
     public void clearHPlayerList() {
         hPlayers.clear();
     }
+
+    public int getAddX() { return this.addX; }
+
+    public int getMinX() { return this.minX; }
+
+    public int getMaxX() { return this.maxX; }
+
+    public int getAddY() { return this.addY; }
+
+    public int getMinY() { return this.minY; }
+
+    public int getMaxY() { return this.maxY; }
+
+
+    public void setAddX(int addX) { this.addX = addX; }
+
+    public void setAddY(int addY) { this.addY = addY; }
 
 }
