@@ -2,13 +2,13 @@ package me.dooger.duelsniffer.statapi.duels;
 
 public enum DuelsModes {
 
-    ALL(""), SKYWARS("sw_", "skywars"), SKYWARS_DOUBLES("sw_doubles_", "skywars_doubles"),
-    SKYWARS_TOURNAMENT("sw_tournament_", "skywars_tournament"), BOW("bow_", "bow"),
-    OP("op_", "op"), OP_DOUBLES("op_doubles_", "op doubles"), UHC("uhc_", "uhc"),
-    UHC_DOUBLES("uhc_doubles_", "uhc_doubles"), NO_DEBUFF("no_debuff_", "no_debuff"),
-    COMBO("combo_", "combo"), BLITZ("blitz_", "blitz"), SUMO("sumo_", "sumo"),
-    SUMO_TOURNAMENT("sumo_tournament_", "sumo_tournament"), MEGAWALLS("mw_", "megawalls"),
-    BRIDGE("bridge_", "bridge"), CLASSIC("classic_", "classic");
+    ALL("", "Overall"), SKYWARS("sw_", "Skywars"), SKYWARS_DOUBLES("sw_doubles_", "Skywars 2v2"),
+    SKYWARS_TOURNAMENT("sw_tournament_", "Skywars Tournament"), BOW("bow_", "Bow"),
+    OP("op_", "OP"), OP_DOUBLES("op_doubles_", "OP 2v2"), UHC("uhc_", "UHC"),
+    UHC_DOUBLES("uhc_doubles_", "UHC 2v2"), NO_DEBUFF("no_debuff_", "No Debuff"),
+    COMBO("combo_", "Combo"), BLITZ("blitz_", "Blitz"), SUMO("sumo_", "Sumo"),
+    SUMO_TOURNAMENT("sumo_tournament_", "Sumo Tournament"), MEGAWALLS("mw_", "Mega Walls"),
+    BRIDGE("bridge_", "Bridge"), CLASSIC("classic_", "Classic");
 
     final String mode, gameModeName;
 

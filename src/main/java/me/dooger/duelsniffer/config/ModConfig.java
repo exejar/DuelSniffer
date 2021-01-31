@@ -12,11 +12,11 @@ import java.io.Writer;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-import static me.dooger.duelsniffer.config.ModConfigNames.APIKEY;
+import static me.dooger.duelsniffer.config.ModConfigNames.*;
 
 public class ModConfig {
 
-    private static String apiKey;
+    private static String apiKey, hudMode, hudX, hudY;
     private static ModConfig instance;
 
     public static ModConfig getInstance() {
@@ -31,6 +31,18 @@ public class ModConfig {
     public void setApiKey(String key) {
         apiKey = key;
     }
+
+    public String getHudMode() { return hudMode; }
+
+    public void setHudMode(String mode) { hudMode = mode; }
+
+    public String getHudX() { return hudX; }
+
+    public void setHudX(int x) { hudX = Integer.toString(x); }
+
+    public String getHudY() { return hudY;}
+
+    public void setHudY(int y) { hudY = Integer.toString(y); }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void makeFile() {
@@ -54,6 +66,9 @@ public class ModConfig {
     public void loadConfigFromFile() {
         if (!getFile().exists()) makeFile();
         apiKey = getString(APIKEY);
+        hudMode = getString(HUDMODE);
+        hudX = getString(HUDX);
+        hudY = getString(HUDY);
     }
 
     public File getFile() {
@@ -69,6 +84,9 @@ public class ModConfig {
     public void save() {
         HashMap<String, Object> map = new HashMap<>();
         map.put(APIKEY.toString(), getApiKey());
+        map.put(HUDMODE.toString(), getHudMode());
+        map.put(HUDX.toString(), getHudX());
+        map.put(HUDY.toString(), getHudY());
         try (Writer writer = new FileWriter(getFile())) {
             Handler.getGson().toJson(map, writer);
         } catch (Exception e) {

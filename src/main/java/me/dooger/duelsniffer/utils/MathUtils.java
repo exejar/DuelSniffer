@@ -1,6 +1,9 @@
 package me.dooger.duelsniffer.utils;
 
+import me.dooger.duelsniffer.statapi.duels.DuelsModes;
+
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
 public class MathUtils {
 
@@ -19,6 +22,11 @@ public class MathUtils {
             d = int1;
         }
         return d;
+    }
+
+    public static int findIndexInArray(DuelsModes arr[], DuelsModes t) {
+        int index = Arrays.binarySearch(arr, t);
+        return (index < 0) ? -1 : index;
     }
 
 }

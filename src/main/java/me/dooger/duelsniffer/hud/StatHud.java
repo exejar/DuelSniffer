@@ -1,5 +1,6 @@
 package me.dooger.duelsniffer.hud;
 
+import me.dooger.duelsniffer.config.ModConfig;
 import me.dooger.duelsniffer.statapi.HPlayer;
 import me.dooger.duelsniffer.utils.ChatColor;
 import net.minecraft.client.Minecraft;
@@ -16,10 +17,25 @@ public class StatHud extends RenderUtils {
     private HashMap<String,HPlayer> hPlayers;
     private Minecraft mc = Minecraft.getMinecraft();
 
-    private int addX = 0, addY = 0, minX, maxX, minY, maxY;
+    private int addX, addY, minX, maxX, minY, maxY;
 
     public StatHud() {
         hPlayers = new HashMap<>();
+
+        ModConfig config = ModConfig.getInstance();
+
+        if (config.getHudX() == null || config.getHudX().isEmpty()) {
+            addX = 0;
+        } else {
+            addX = Integer.parseInt(config.getHudX());
+        }
+
+        if (config.getHudY() == null || config.getHudY().isEmpty()) {
+            addY = 0;
+        } else {
+            addY = Integer.parseInt(config.getHudY());
+        }
+
     }
 
     @SubscribeEvent

@@ -1,6 +1,7 @@
 package me.dooger.duelsniffer.events;
 
 import me.dooger.duelsniffer.Main;
+import me.dooger.duelsniffer.config.ModConfig;
 import me.dooger.duelsniffer.statapi.HPlayer;
 import me.dooger.duelsniffer.statapi.duels.Duels;
 import me.dooger.duelsniffer.statapi.duels.DuelsModes;
@@ -10,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class QueueEvent {
@@ -27,17 +29,26 @@ public class QueueEvent {
             int joinPos = Integer.parseInt(StringUtils.substringBetween(players, "(", "/"));
             int maxPlayers = Integer.parseInt(StringUtils.substringBetween(players, "/", ")"));
 
+            System.out.println(joinPos + " " + maxPlayers);
+
             if (joinPos == maxPlayers) {
                 Handler.asExecutor(()-> {
                     try {
-                        Thread.sleep(250);
+                        Thread.sleep(300);
                     } catch (InterruptedException ignored){}
 
                     for (EntityPlayer player : Minecraft.getMinecraft().theWorld.playerEntities) {
                         if (player.getTeam().getRegisteredName().equalsIgnoreCase("§7§k")) {
                             if (!Main.getInstance().statHud.getHPlayers().containsKey(player.getName())) {
                                 Handler.asExecutor(()-> {
-                                    Duels duels = new Duels(player.getName(), player.getUniqueID().toString(), DuelsModes.ALL);
+                                    DuelsModes mode;
+                                    if (!EnumUtils.isValidEnum(DuelsModes.class, ModConfig.getInstance().getHudMode())) {
+                                        mode = DuelsModes.ALL;
+                                    } else {
+                                        mode = DuelsModes.valueOf(ModConfig.getInstance().getHudMode());
+                                    }
+
+                                    Duels duels = new Duels(player.getName(), player.getUniqueID().toString(), mode);
                                     Main.getInstance().statHud.addHPlayer(player.getName(), new HPlayer(duels));
                                 });
                             }
