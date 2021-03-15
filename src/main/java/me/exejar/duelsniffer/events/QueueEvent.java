@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.commons.lang3.EnumUtils;
@@ -35,7 +34,6 @@ public class QueueEvent {
         }
 
         if (!mc.isGamePaused() && mc.thePlayer != null && ingame) {
-            System.out.println("trying to grab players");
             this.tick();
         }
     }
@@ -45,30 +43,28 @@ public class QueueEvent {
             UUID playerUUID = playerInfo.getGameProfile().getId();
             String name = playerInfo.getGameProfile().getName();
 
-//            if (playerUUID != mc.thePlayer.getUniqueID() && !name.equalsIgnoreCase(mc.thePlayer.getName())) {
-                if (playerUUID.version() == 4) {
-                    if (playerInfo.getResponseTime() <= 1) {
-                        if (!Main.getInstance().statHud.getHPlayers().containsKey(name) && !Main.getInstance().statHud.getAssembly().contains(name)) {
-                            Handler.asExecutor(()-> {
-                                System.out.println("added to assembly");
-                                Main.getInstance().statHud.addAseembly(name);
+            if (playerInfo.getPlayerTeam() != null) {
+                String registeredName = playerInfo.getPlayerTeam().getRegisteredName();
 
-                                DuelsModes mode;
-                                if (!EnumUtils.isValidEnum(DuelsModes.class, ModConfig.getInstance().getHudMode())) {
-                                    mode = DuelsModes.ALL;
-                                } else {
-                                    mode = DuelsModes.valueOf(ModConfig.getInstance().getHudMode());
-                                }
+                if (registeredName.contains("§7§k")) {
+                    if (!Main.getInstance().statHud.getHPlayers().containsKey(name) && !Main.getInstance().statHud.getAssembly().contains(name)) {
+                        Handler.asExecutor(()-> {
+                            Main.getInstance().statHud.addAseembly(name);
 
-                                Duels duels = new Duels(name, playerUUID.toString(), mode);
-                                Main.getInstance().statHud.addHPlayer(name, new HPlayer(duels));
+                            DuelsModes mode;
+                            if (!EnumUtils.isValidEnum(DuelsModes.class, ModConfig.getInstance().getHudMode())) {
+                                mode = DuelsModes.ALL;
+                            } else {
+                                mode = DuelsModes.valueOf(ModConfig.getInstance().getHudMode());
+                            }
 
-                                Main.getInstance().statHud.removeAssembly(name);
-                                System.out.println("removed from assembly");
-                            });
-                        }
+                            Duels duels = new Duels(name, playerUUID.toString(), mode);
+                            Main.getInstance().statHud.addHPlayer(name, new HPlayer(duels));
+
+                            Main.getInstance().statHud.removeAssembly(name);
+                        });
                     }
-//                }
+                }
             }
         }
     }
@@ -89,7 +85,7 @@ public class QueueEvent {
             String server = obj.get("server").getAsString();
             String gametype = obj.get("gametype").getAsString();
 
-            if (obj.get("mode") != null && obj.get("map") != null) {
+            if (obj.get("mode") != null && obj.get("map") != null && gametype.equalsIgnoreCase("DUELS")) {
                 this.ingame = true;
             } else {
                 this.ingame = false;
