@@ -10,17 +10,20 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StatHud extends RenderUtils {
-    private HashMap<String,HPlayer> hPlayers;
+    private ConcurrentHashMap<String,HPlayer> hPlayers;
+    private CopyOnWriteArrayList<String> assembly;
     private Minecraft mc = Minecraft.getMinecraft();
 
     private int addX, addY, minX, maxX, minY, maxY;
 
     public StatHud() {
-        hPlayers = new HashMap<>();
+        hPlayers = new ConcurrentHashMap<>();
+        assembly = new CopyOnWriteArrayList<>();
 
         ModConfig config = ModConfig.getInstance();
 
@@ -105,7 +108,7 @@ public class StatHud extends RenderUtils {
         this.maxY = addY + height;
     }
 
-    public HashMap<String,HPlayer> getHPlayers() {
+    public ConcurrentHashMap<String,HPlayer> getHPlayers() {
         return hPlayers;
     }
 
@@ -120,6 +123,12 @@ public class StatHud extends RenderUtils {
     public void clearHPlayerList() {
         hPlayers.clear();
     }
+
+    public CopyOnWriteArrayList<String> getAssembly() { return this.assembly; }
+
+    public void addAseembly(String name) { this.assembly.add(name); }
+
+    public void removeAssembly(String name) { this.assembly.remove(name); }
 
     public int getAddX() { return this.addX; }
 
