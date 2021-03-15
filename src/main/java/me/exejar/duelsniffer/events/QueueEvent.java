@@ -91,6 +91,8 @@ public class QueueEvent {
                 this.ingame = false;
                 if (!Main.getInstance().statHud.getHPlayers().isEmpty()) Main.getInstance().statHud.clearHPlayerList();
             }
+        } else if (msg.contains("§r§a§l▬▬▬▬▬▬▬") && !Main.getInstance().statHud.getInGameStats()) {
+            if (!Main.getInstance().statHud.getHPlayers().isEmpty()) Main.getInstance().statHud.clearHPlayerList();
         }
     }
 

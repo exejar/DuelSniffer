@@ -1,5 +1,7 @@
 package me.exejar.duelsniffer.config;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import me.exejar.duelsniffer.utils.ChatUtils;
 import me.exejar.duelsniffer.utils.Handler;
 import org.json.simple.JSONObject;
@@ -14,7 +16,8 @@ import java.util.HashMap;
 
 public class ModConfig {
 
-    private static String apiKey, hudMode, hudX, hudY;
+    private String apiKey, hudMode, hudX, hudY;
+    private boolean inGame;
     private static ModConfig instance;
 
     public static ModConfig getInstance() {
@@ -33,6 +36,10 @@ public class ModConfig {
     public String getHudMode() { return hudMode; }
 
     public void setHudMode(String mode) { hudMode = mode; }
+
+    public boolean getInGame() { return inGame; }
+
+    public void setInGame(boolean inGame) { this.inGame = inGame; }
 
     public String getHudX() { return hudX; }
 
@@ -67,6 +74,7 @@ public class ModConfig {
         hudMode = getString(ModConfigNames.HUDMODE);
         hudX = getString(ModConfigNames.HUDX);
         hudY = getString(ModConfigNames.HUDY);
+        inGame = getBool(ModConfigNames.INGAME);
     }
 
     public File getFile() {
@@ -85,6 +93,7 @@ public class ModConfig {
         map.put(ModConfigNames.HUDMODE.toString(), getHudMode());
         map.put(ModConfigNames.HUDX.toString(), getHudX());
         map.put(ModConfigNames.HUDY.toString(), getHudY());
+        map.put(ModConfigNames.INGAME.toString(), getInGame());
         try (Writer writer = new FileWriter(getFile())) {
             Handler.getGson().toJson(map, writer);
         } catch (Exception e) {
@@ -94,16 +103,29 @@ public class ModConfig {
     }
 
     public String getString(ModConfigNames key) {
-        JSONParser parser = new JSONParser();
+        JsonParser parser = new JsonParser();
         String s = "";
         try {
-            JSONObject object = (JSONObject) parser.parse(new FileReader(getFile()));
-            s = (String) object.get(key.toString());
+            JsonObject object = parser.parse(new FileReader(getFile())).getAsJsonObject();
+            s = object.get(key.toString()).getAsString();
         } catch (NullPointerException ignored) {
         } catch (Exception e) {
             e.printStackTrace();
         }
         return s;
+    }
+
+    public boolean getBool(ModConfigNames key) {
+        JsonParser parser = new JsonParser();
+        boolean b = false;
+        try {
+            JsonObject object = parser.parse(new FileReader(getFile())).getAsJsonObject();
+            b = object.get(key.toString()).getAsBoolean();
+        } catch (NullPointerException ignored) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return b;
     }
 
 }

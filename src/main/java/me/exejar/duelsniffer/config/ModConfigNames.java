@@ -2,7 +2,7 @@ package me.exejar.duelsniffer.config;
 
 public enum ModConfigNames {
 
-    APIKEY("ApiKey"), HUDMODE("HudMode"), HUDX("HudX"), HUDY("HudY");
+    APIKEY("ApiKey"), HUDMODE("HudMode"), HUDX("HudX"), HUDY("HudY"), INGAME("InGame");
 
     private final String name;
 

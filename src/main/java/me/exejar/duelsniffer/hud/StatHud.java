@@ -17,6 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class StatHud extends RenderUtils {
     private ConcurrentHashMap<String,HPlayer> hPlayers;
     private CopyOnWriteArrayList<String> assembly;
+    private boolean ingamestats;
     private Minecraft mc = Minecraft.getMinecraft();
 
     private int addX, addY, minX, maxX, minY, maxY;
@@ -129,6 +130,10 @@ public class StatHud extends RenderUtils {
     public void addAseembly(String name) { this.assembly.add(name); }
 
     public void removeAssembly(String name) { this.assembly.remove(name); }
+
+    public void setInGameStats(boolean ingamestats) { this.ingamestats = ingamestats; }
+
+    public boolean getInGameStats() { return this.ingamestats; }
 
     public int getAddX() { return this.addX; }
 

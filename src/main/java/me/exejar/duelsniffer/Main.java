@@ -32,6 +32,7 @@ public class Main {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         statHud = new StatHud();
+        statHud.setInGameStats(ModConfig.getInstance().getInGame());
         registerListeners(statHud, new QueueEvent(), new SetAPIEvent());
         registerCommands(new GetStats(), new GuiCommand());
     }

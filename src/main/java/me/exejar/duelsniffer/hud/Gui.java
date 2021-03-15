@@ -8,20 +8,21 @@ import me.exejar.duelsniffer.utils.MathUtils;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.apache.commons.lang3.EnumUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
 
 public class Gui extends GuiScreen {
-    private boolean dragging;
+    private boolean dragging, ingameStats;
     private int lastMouseX;
     private int lastMouseY;
     private int lastAddX;
     private int lastAddY;
     private String buttonName = "Click Me to Cycle Mode!";
-    private final int CHANGEMODEID = 0;
+    private final int CHANGEMODEID = 0, IGSTATS = 1;
     private DuelsModes duelMode;
 
-    GuiButton changeMode;
+    GuiButton changeMode, inGameStats;
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -44,7 +45,9 @@ public class Gui extends GuiScreen {
         fontRendererObj.drawString("AIM", minX + 305, minY + 5, ChatColor.RED.getRGB());
 
         drawString(fontRendererObj, duelMode.toGameString(), centerX - (fontRendererObj.getStringWidth(duelMode.toGameString()) / 2), centerY + 30, 0xFFFFFF);
+        drawString(fontRendererObj, StringUtils.capitalize(Boolean.toString(this.ingameStats)), centerX - (fontRendererObj.getStringWidth(Boolean.toString(this.ingameStats)) / 2), centerY - 45, 0xFFFFFF);
         changeMode.drawButton(mc, mouseX, mouseY);
+        inGameStats.drawButton(mc, mouseX, mouseY);
     }
 
     @Override
@@ -55,12 +58,15 @@ public class Gui extends GuiScreen {
             duelMode = DuelsModes.valueOf(config.getHudMode());
         }
 
+        ingameStats = config.getInGame();
+
         buttonList.clear();
 
         final int centerX = width/2;
         final int centerY = height/2;
 
         buttonList.add(changeMode = new GuiButton(CHANGEMODEID, centerX - 75, centerY, 150, 20, buttonName));
+        buttonList.add(inGameStats = new GuiButton(IGSTATS, centerX - 75, centerY - 25, 150, 20, "Show Stats In-Game"));
     }
 
     @Override
@@ -72,6 +78,9 @@ public class Gui extends GuiScreen {
             }
 
             duelMode = DuelsModes.values()[index + 1];
+        } else if (guiButton.id == IGSTATS) {
+            this.ingameStats = !this.ingameStats;
+            Main.getInstance().statHud.setInGameStats(this.ingameStats);
         }
     }
 
@@ -116,6 +125,7 @@ public class Gui extends GuiScreen {
         config.setHudMode(duelMode.name());
         config.setHudX(hud.getAddX());
         config.setHudY(hud.getAddY());
+        config.setInGame(ingameStats);
         config.save();
     }
 
