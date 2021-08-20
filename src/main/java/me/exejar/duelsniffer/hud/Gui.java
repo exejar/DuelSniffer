@@ -1,6 +1,6 @@
 package me.exejar.duelsniffer.hud;
 
-import me.exejar.duelsniffer.Main;
+import me.exejar.duelsniffer.DuelSniffer;
 import me.exejar.duelsniffer.config.ModConfig;
 import me.exejar.duelsniffer.statapi.duels.DuelsModes;
 import me.exejar.duelsniffer.utils.ChatColor;
@@ -80,7 +80,7 @@ public class Gui extends GuiScreen {
             duelMode = DuelsModes.values()[index + 1];
         } else if (guiButton.id == IGSTATS) {
             this.ingameStats = !this.ingameStats;
-            Main.getInstance().statHud.setInGameStats(this.ingameStats);
+            DuelSniffer.getInstance().statHud.setInGameStats(this.ingameStats);
         }
     }
 
@@ -133,6 +133,6 @@ public class Gui extends GuiScreen {
     public boolean doesGuiPauseGame() { return false; }
 
     private ModConfig config = ModConfig.getInstance();
-    private StatHud hud = Main.getInstance().statHud;
+    private StatHud hud = DuelSniffer.getInstance().statHud;
 
 }

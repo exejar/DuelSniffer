@@ -1,6 +1,6 @@
 package me.exejar.duelsniffer.commands;
 
-import me.exejar.duelsniffer.Main;
+import me.exejar.duelsniffer.DuelSniffer;
 import me.exejar.duelsniffer.hud.Gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandException;
@@ -36,7 +36,7 @@ public class GuiCommand extends DuelCommandBase {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        Main.getInstance().statHud.updatePos();
+        DuelSniffer.getInstance().statHud.updatePos();
         Minecraft.getMinecraft().displayGuiScreen(new Gui());
         MinecraftForge.EVENT_BUS.unregister(this);
     }
