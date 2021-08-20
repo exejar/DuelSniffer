@@ -2,7 +2,7 @@ package me.exejar.duelsniffer.events;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import me.exejar.duelsniffer.Main;
+import me.exejar.duelsniffer.DuelSniffer;
 import me.exejar.duelsniffer.config.ModConfig;
 import me.exejar.duelsniffer.statapi.HPlayer;
 import me.exejar.duelsniffer.statapi.duels.Duels;
@@ -47,9 +47,9 @@ public class QueueEvent {
                 String registeredName = playerInfo.getPlayerTeam().getRegisteredName();
 
                 if (registeredName.contains("§7§k")) {
-                    if (!Main.getInstance().statHud.getHPlayers().containsKey(name) && !Main.getInstance().statHud.getAssembly().contains(name)) {
+                    if (!DuelSniffer.getInstance().statHud.getHPlayers().containsKey(name) && !DuelSniffer.getInstance().statHud.getAssembly().contains(name)) {
                         Handler.asExecutor(()-> {
-                            Main.getInstance().statHud.addAseembly(name);
+                            DuelSniffer.getInstance().statHud.addAseembly(name);
 
                             DuelsModes mode;
                             if (!EnumUtils.isValidEnum(DuelsModes.class, ModConfig.getInstance().getHudMode())) {
@@ -59,9 +59,9 @@ public class QueueEvent {
                             }
 
                             Duels duels = new Duels(name, playerUUID.toString(), mode);
-                            Main.getInstance().statHud.addHPlayer(name, new HPlayer(duels));
+                            DuelSniffer.getInstance().statHud.addHPlayer(name, new HPlayer(duels));
 
-                            Main.getInstance().statHud.removeAssembly(name);
+                            DuelSniffer.getInstance().statHud.removeAssembly(name);
                         });
                     }
                 }
@@ -75,7 +75,7 @@ public class QueueEvent {
         String umsg = event.message.getUnformattedText();
         if (msg.contains("§r§e has quit!")) {
             String playerName = umsg.replace(" has quit!", "");
-            if (Main.getInstance().statHud.getHPlayers().containsKey(playerName)) Main.getInstance().statHud.removeHPlayer(playerName);
+            if (DuelSniffer.getInstance().statHud.getHPlayers().containsKey(playerName)) DuelSniffer.getInstance().statHud.removeHPlayer(playerName);
         } else if (umsg.startsWith("{\"server\":")) {
             event.setCanceled(true);
             JsonParser jsonParser = new JsonParser();
@@ -89,15 +89,15 @@ public class QueueEvent {
                 this.ingame = true;
             } else {
                 this.ingame = false;
-                if (!Main.getInstance().statHud.getHPlayers().isEmpty()) Main.getInstance().statHud.clearHPlayerList();
+                if (!DuelSniffer.getInstance().statHud.getHPlayers().isEmpty()) DuelSniffer.getInstance().statHud.clearHPlayerList();
             }
-        } else if (msg.contains("§r§a§l▬▬▬▬▬▬▬") && !Main.getInstance().statHud.getInGameStats()) {
-            if (!Main.getInstance().statHud.getHPlayers().isEmpty()) Main.getInstance().statHud.clearHPlayerList();
+        } else if (msg.contains("§r§a§l▬▬▬▬▬▬▬") && !DuelSniffer.getInstance().statHud.getInGameStats()) {
+            if (!DuelSniffer.getInstance().statHud.getHPlayers().isEmpty()) DuelSniffer.getInstance().statHud.clearHPlayerList();
         }
     }
 
 //    if (msg.equalsIgnoreCase("§r§f §r§f §r§1 §r§0 §r§2 §r§f §r§f §r§2 §r§0 §r§4 §r§3 §r§9 §r§2 §r§0 §r§0 §r§3 §r§9 §r§2 §r§0 §r§0 §r§3 §r§9 §r§2 §r§0 §r§0 §r") || msg.contains("§r§a§l▬▬▬▬▬▬▬")) {
-//            if (!Main.getInstance().statHud.getHPlayers().isEmpty()) Main.getInstance().statHud.clearHPlayerList();
+//            if (!DuelSniffer.getInstance().statHud.getHPlayers().isEmpty()) DuelSniffer.getInstance().statHud.clearHPlayerList();
 //        } else
 
 //    if (msg.contains("§r§e has joined (")) {
@@ -119,7 +119,7 @@ public class QueueEvent {
 //
 //                    for (EntityPlayer player : Minecraft.getMinecraft().theWorld.playerEntities) {
 //                        if (player.getTeam().getRegisteredName().equalsIgnoreCase("§7§k")) {
-//                            if (!Main.getInstance().statHud.getHPlayers().containsKey(player.getName())) {
+//                            if (!DuelSniffer.getInstance().statHud.getHPlayers().containsKey(player.getName())) {
 //                                Handler.asExecutor(()-> {
 //                                    DuelsModes mode;
 //                                    if (!EnumUtils.isValidEnum(DuelsModes.class, ModConfig.getInstance().getHudMode())) {
@@ -129,7 +129,7 @@ public class QueueEvent {
 //                                    }
 //
 //                                    Duels duels = new Duels(player.getName(), player.getUniqueID().toString(), mode);
-//                                    Main.getInstance().statHud.addHPlayer(player.getName(), new HPlayer(duels));
+//                                    DuelSniffer.getInstance().statHud.addHPlayer(player.getName(), new HPlayer(duels));
 //                                });
 //                            }
 //                        }
